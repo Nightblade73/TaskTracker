@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of signup_controller
- *
- * @author v-zar
- */
 class Signup_Controller extends Controller {
 
     function action_index($data = null) {
@@ -34,13 +29,18 @@ class Signup_Controller extends Controller {
                 $errors[] = 'Пользователь с такой почтой уже существует!';
             }
             if (empty($errors)) {
+//                $role = R::dispense('roles');
+//                $role->role_name = 'Менеджер проектов'; //
+//                 R::store($role);
                 $user = R::dispense('users');
                 $user->login = $data['login'];
                 $user->email = $data['email'];
+                $role = R::findOne('roles', "role_name = ?", array($data['role']));
+
+                $user->role = $role->id;
                 $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
                 R::store($user);
-                echo '<div style="color: green;">' . "Вы успешно "
-                . "зарегистрированы!" . '</div><hr>';
+                header('Location: /main');
             } else {
                 echo '<div style="color: red;">' . array_shift($errors) .
                 '</div><hr>';

@@ -21,18 +21,18 @@
 			}
 			
 			// добавляем префиксы
-			$model_name = $controller_name.'_Model';
+		//	$model_name = $controller_name.'_Model';
 			$controller_name = $controller_name.'_Controller';
 			$action_name = 'action_'.$action_name;
 			
 			// подцепляем файл с классом модели (файла модели может и не быть)
 			
-			$model_file = strtolower($model_name).'.php';
-			$model_path = "app/models/".$model_file;
-			if(file_exists($model_path))
-			{
-				include "app/models/".$model_file;
-			}
+//			$model_file = strtolower($model_name).'.php';
+//			$model_path = "app/models/".$model_file;
+//			if(file_exists($model_path))
+//			{
+//				include "app/models/".$model_file;
+//			}
 			
 			// подцепляем файл с классом контроллера
 			$controller_file = strtolower($controller_name).'.php';

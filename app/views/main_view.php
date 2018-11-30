@@ -19,10 +19,6 @@
             <button type="submit" name="do_signin">Войти</button>
         </p>
     </form>
-
-
-
-
     <div class="col-lg-offset-1" style="color:#999;">
         <a href="/signup">Регистрация</a> 
     </div>

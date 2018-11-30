@@ -10,7 +10,11 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-        Авторизован!
+        <?php if($_SESSION['logged_user']->role == 1): ?>
+        Авторизован пользователь!!
+        <?php else : ?>
+        Авторизован менеджер!!
+        <?php endif;?>
         <a href="tasklist/logout">Выйти</a>
     </body>
 </html>
