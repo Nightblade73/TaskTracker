@@ -4,16 +4,23 @@
 
     <p>Please fill out the following fields to login:</p>
 
-    <form>
-        
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-               
-            </div>
-        </div>
+    <form action="/main/login" method="POST">
+        <p>
+        <p> <strong>Логин</strong>:</p>
+        <input type="text" name="login" value="<?php echo $data['login']; ?>">
+        </p>
+        <p>
+        <p>
+        <p>  <strong>Пароль</strong>:</p>
+        <input type="password" name="password">
+        </p>
+        <p>
+        <p>
+            <button type="submit" name="do_signin">Войти</button>
+        </p>
     </form>
-        
-        
+
+
 
 
     <div class="col-lg-offset-1" style="color:#999;">
