@@ -31,8 +31,9 @@
 
 <div class="container-fluid">
     <?php
-    $tasks = R::findAll('tasks');
-    foreach ($tasks as $task) {
+    $tasks = R::findAll('tasks_users', "users_id = ?", array($_SESSION['logged_user']->id));
+    foreach ($tasks as $task_id) {
+        $task = R::findOne('tasks', "id = ?", array($task_id->tasks_id));
         echo '<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
                 <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
                 data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="'
