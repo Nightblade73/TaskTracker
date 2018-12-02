@@ -1,4 +1,7 @@
 <script src="../../js/script.js"></script>
+<link rel="stylesheet/less" type="text/css" href="../../css/tasklist-styles.less" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="#">
         <img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -8,7 +11,7 @@
             Авторизован менеджер!!
         <?php endif; ?>
     </a>
-    <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-Task">
+    <button id="add-task-but" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-Task" data-backdrop="static" data-keyboard="false">
         Добавить задачу
     </button>
     <form class="form-inline float-right">
@@ -20,16 +23,16 @@
 
 
 <div class="container-fluid">
-    <div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
-        <button type="button" class="card-header btn btn-primary" data-toggle="modal" data-target="#edit-Task"> 
-            Имя задачи 
-        </button>
-    </div>
-    <div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
-        <button type="button" class="card-header btn btn-primary" data-toggle="modal" data-target="#edit-Task"> 
-            Имя задачи 
-        </button>
-    </div>
+    <?php
+    $tasks = R::findAll('tasks');
+    foreach ($tasks as $task) {
+        echo '<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
+                <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
+                data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="' 
+        . $task->task_name . '"/></div>';
+    }
+    ?>
+
     <!--                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
                         <div class="card-header">Header</div>
                         <div class="card-body">
@@ -92,17 +95,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="">
+            <form method="post" action="">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="text">Имя задачи:</label>
-                        <input id="task-name" type="text" class="form-control">
-                    </div>
+                    <label for="text">Имя задачи:</label>
+                    <input id="task-name" type="text" class="form-control">
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button id="add" type="submit" class="btn btn-primary" data-dismiss="modal">Добавить</button>
+                    <input id="add" class="btn btn-primary" type="button" data-dismiss="modal" value="Добавить">
                 </div>
             </form>
         </div>
@@ -113,7 +113,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title task-title" id="exampleModalLongTitle">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -121,8 +121,15 @@
             <div class="modal-body">
                 <form action="">
                     <div class="form-group">
-                        <label for="email">Email address:</label>
-                        <input type="email" class="form-control" id="email">
+                        <label for="text">Описание задачи:</label>
+                        <a id="change-desc" href="#" class="float-right">Редактировать</a>
+                        <a id="cancel-desc" href="#" class="float-right" >Отмена</a>
+                        <textarea type="text" class="form-control" id="description" disabled="true" >
+                            <?php
+                            $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+                            ?>
+                        </textarea>
+                        <input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="button" value="Добавить" >
                     </div>
                     <div class="form-group">
                         <label for="pwd">Password:</label>
@@ -133,13 +140,12 @@
                             <input class="form-check-input" type="checkbox"> Remember me
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button id="" type="button" class="btn btn-primary">Добавить задачу</button>
-            </div>
+            <!--            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                            <button id="" type="button" class="btn btn-primary">Добавить задачу</button>
+                        </div>-->
         </div>
     </div>
 </div>

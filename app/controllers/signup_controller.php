@@ -36,7 +36,6 @@ class Signup_Controller extends Controller {
                 $user->login = $data['login'];
                 $user->email = $data['email'];
                 $role = R::findOne('roles', "role_name = ?", array($data['role']));
-
                 $user->role = $role->id;
                 $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
                 R::store($user);
