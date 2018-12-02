@@ -3,27 +3,48 @@ $('#sandbox-container .input-daterange').datepicker({
     autoclose: true,
     todayHighlight: true
 });
+
 $(document).ready(function () {
 
     var $taskDescriptionOld;
 
     $("#add").click(function (e) {
-        e.preventDefault();
+        //  e.preventDefault();
         var $taskname = $('#task-name').val().trim();
         if ($taskname === '') {
             alert("Пустая строка");
             return false;
         }
-        console.log($taskname);
         $.ajax({
             url: "http://localhost/tasklist/addtask",
             type: "POST",
             data: {name: $taskname},
             success: function (data, textStatus, jqXHR) {
-                $('.container-fluid').append('<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">\n\
-        <button type="button" class="card-header btn btn-primary" data-toggle="modal"data-target="#editTask"> ' +
-                        data + '</button>\n\
-        </div>');
+                $('.container-fluid').append('<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">\n\
+        <input type="button" class="card-header btn btn-primary task newtask" data-toggle="modal" data-target="#edit-Task" \n\
+        data-backdrop="static" data-keyboard="false" value="' + data + '"/></div>');
+                $('.newtask').click(function (e) {
+                    e.preventDefault();
+                    console.log(this.value);
+                    $('.task-title').html(this.value);
+                    console.log($('.task-title').html());
+                    $.ajax({
+                        url: "http://localhost/tasklist/gettaskinfo",
+                        type: "POST",
+                        data: {name: $('.task-title').html()},
+                        success: function (data, textStatus, jqXHR) {
+                            var $json = JSON.parse(data);
+                            console.log($json);
+                            $('#description').val($json.description);
+                            $('input[name="begin"]').val($json.date_begin);
+                            $('input[name="end"]').val($json.date_end);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+                        }
+                    });
+                });
+                $('.newtask').removeClass('newtask');
                 $('#add-Task').modal('toggle');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -57,27 +78,31 @@ $(document).ready(function () {
 
     $(".task").click(function (e) {
         e.preventDefault();
-        $('.task-title').html(this.value);      
+        console.log(this.value);
+        $('.task-title').html(this.value);
+        console.log($('.task-title').html());
         $.ajax({
             url: "http://localhost/tasklist/gettaskinfo",
             type: "POST",
-            data: {name: $('.task-title').text()},
+            data: {name: $('.task-title').html()},
             success: function (data, textStatus, jqXHR) {
                 var $json = JSON.parse(data);
                 console.log($json);
                 $('#description').val($json.description);
+                $('input[name="begin"]').val($json.date_begin);
+                $('input[name="end"]').val($json.date_end);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
             }
         });
     });
-    
+
     $("#task-close-but").click(function (e) {
         e.preventDefault();
         $('#description').val("");
     });
-    
+
     $("#add-task-but").click(function (e) {
         e.preventDefault();
         $('#task-name').val("");

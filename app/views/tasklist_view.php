@@ -17,7 +17,8 @@
             Авторизован менеджер!!
         <?php endif; ?>
     </a>
-    <button id="add-task-but" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-Task" data-backdrop="static" data-keyboard="false">
+    <button id="add-task-but" type="button" class="btn btn-primary" data-toggle="modal" 
+            data-target="#add-Task" data-backdrop="static" data-keyboard="false">
         Добавить задачу
     </button>
     <form class="form-inline float-right">
@@ -35,7 +36,8 @@
         echo '<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
                 <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
                 data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="'
-        . $task->task_name . '"/></div>';
+        . $task->task_name . '""/>'
+                . '</div>';
     }
     ?>
 
@@ -138,9 +140,9 @@
                         <input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Сохранить" hidden>
                     </div>
                     <div class="input-daterange input-group" id="datepicker">
-                        <input type="date" class="input-sm form-control" name="start" />
+                        <input type="date" class="input-sm form-control" name="begin" data-date-format="DD/MM/YYYY"/>
                         <span class="input-group-addon">to</span>
-                        <input type="date" class="input-sm form-control" name="end" />
+                        <input type="date" class="input-sm form-control" name="end" data-date-format="DD/MM/YYYY"/>
                     </div>
                     <div class="form-group form-check">
                         <label class="form-check-label">
