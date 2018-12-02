@@ -7,7 +7,7 @@ $('#sandbox-container .input-daterange').datepicker({
 $(document).ready(function () {
 
     var $taskDescriptionOld;
-
+// Добавление новой задачи
     $("#add").click(function (e) {
         //  e.preventDefault();
         var $taskname = $('#task-name').val().trim();
@@ -25,9 +25,7 @@ $(document).ready(function () {
         data-backdrop="static" data-keyboard="false" value="' + data + '"/></div>');
                 $('.newtask').click(function (e) {
                     e.preventDefault();
-                    console.log(this.value);
                     $('.task-title').html(this.value);
-                    console.log($('.task-title').html());
                     $.ajax({
                         url: "http://localhost/tasklist/gettaskinfo",
                         type: "POST",
@@ -53,21 +51,17 @@ $(document).ready(function () {
         });
         return false;
     });
-
+//изменение описания
     $("#change-desc-submit").click(function (e) {
         e.preventDefault();
         var $taskDescriptionNew = $('#description').val().trim();
         $.ajax({
             url: "http://localhost/tasklist/changetaskdescription",
             type: "POST",
-            data: {name: $('.task-title').text(),
+            data: {name: $('.task-title').html(),
                 desc: $taskDescriptionNew},
             success: function (data, textStatus, jqXHR) {
-                $('#change-desc-submit').attr('hidden', true);
-                $('#change-desc').removeAttr('hidden');
-                $('#description').attr('disabled', true);
-                $('#description').css('border', 'none');
-                $("#cancel-desc").attr('hidden', true);
+                changeState();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
@@ -75,12 +69,10 @@ $(document).ready(function () {
         });
         return false;
     });
-
+//просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();
-        console.log(this.value);
         $('.task-title').html(this.value);
-        console.log($('.task-title').html());
         $.ajax({
             url: "http://localhost/tasklist/gettaskinfo",
             type: "POST",
@@ -97,17 +89,37 @@ $(document).ready(function () {
             }
         });
     });
-
+//очистка полей
     $("#task-close-but").click(function (e) {
         e.preventDefault();
+        changeState();
         $('#description').val("");
+        $('input[name="begin"]').val("");
+        $('input[name="end"]').val("");
     });
-
+//очистка поля имени задачи
     $("#add-task-but").click(function (e) {
         e.preventDefault();
         $('#task-name').val("");
     });
 
+//изменения даты окончания
+    $('input[name="end"]').change(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/changeenddate",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                date: $('input[name="end"]').val()},
+            success: function (data, textStatus, jqXHR) {
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+    });
+//изменения состояния редактирования описания    
     $("#change-desc").click(function (e) {
         e.preventDefault();
         $taskDescriptionOld = $('#description').val();
@@ -118,15 +130,19 @@ $(document).ready(function () {
         $("#change-desc").attr('hidden', true);
         return false;
     });
-
+//изменения состояния редактирования описания  
     $("#cancel-desc").click(function (e) {
         e.preventDefault();
         $('#description').val($taskDescriptionOld);
+        changeState();
+        return false;
+    });
+
+    function changeState() {
         $('#change-desc-submit').attr('hidden', true);
         $('#change-desc').removeAttr('hidden');
         $('#description').attr('disabled', true);
         $('#description').css('border', 'none');
         $("#cancel-desc").attr('hidden', true);
-        return false;
-    });
+    };
 });

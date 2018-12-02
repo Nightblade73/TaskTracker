@@ -37,7 +37,7 @@
                 <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
                 data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="'
         . $task->task_name . '""/>'
-                . '</div>';
+        . '</div>';
     }
     ?>
 
@@ -139,11 +139,15 @@
                         </textarea>
                         <input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Сохранить" hidden>
                     </div>
-                    <div class="input-daterange input-group" id="datepicker">
-                        <input type="date" class="input-sm form-control" name="begin" data-date-format="DD/MM/YYYY"/>
-                        <span class="input-group-addon">to</span>
-                        <input type="date" class="input-sm form-control" name="end" data-date-format="DD/MM/YYYY"/>
+                    <div class="form-group">
+                        <label for="date">Дата создания задачи:</label>
+                        <input type="date" class="form-control" name="begin" disabled="true"/>
                     </div>
+                    <div class="form-group">
+                        <label for="date">Дата окончания задачи:</label>
+                        <input type="date" class="form-control" name="end"/>
+                    </div>
+
                     <div class="form-group form-check">
                         <label class="form-check-label">
                             <input class="form-check-input" type="checkbox"> Remember me

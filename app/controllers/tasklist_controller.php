@@ -16,7 +16,6 @@ class Tasklist_Controller extends Controller {
         $task = R::dispense('tasks');
         $task->task_name = $data['name'];
         $task->date_begin = date("Y-m-d");
-        $task->date_end = date("Y-m-d");
         R::store($task);
         echo $data['name'];
         //    return true;
@@ -34,5 +33,12 @@ class Tasklist_Controller extends Controller {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
         echo $task;
+    }
+    function action_changeenddate() {
+        $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $task->date_end = $data['date'];
+        R::store($task);
+        echo $data;
     }
 }
