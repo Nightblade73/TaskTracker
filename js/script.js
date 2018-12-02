@@ -69,6 +69,24 @@ $(document).ready(function () {
         });
         return false;
     });
+//добавление комментария
+    $("#add-comment-submit").click(function (e) {
+        e.preventDefault();
+        var $comment = $('#comment').val().trim();
+        $.ajax({
+            url: "http://localhost/tasklist/addcomment",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                comm: $comment},
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();

@@ -43,4 +43,17 @@ class Tasklist_Controller extends Controller {
         echo $data;
     }
 
+    function action_addcomment() {
+        $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $comment = R::dispense('comments');
+        $comment->comment = $data['comm'];
+        $comment->time = time();
+        $comment->ownTasks = $task;
+        $comment->ownUsers = $_SESSION['logged_user'];
+        R::store($comment);
+
+        echo array($data);
+    }
+
 }
