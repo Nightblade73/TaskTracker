@@ -137,7 +137,7 @@ $(document).ready(function () {
         changeState();
         return false;
     });
-
+//отмена редактирования
     function changeState() {
         $('#change-desc-submit').attr('hidden', true);
         $('#change-desc').removeAttr('hidden');

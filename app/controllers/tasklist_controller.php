@@ -16,9 +16,9 @@ class Tasklist_Controller extends Controller {
         $task = R::dispense('tasks');
         $task->task_name = $data['name'];
         $task->date_begin = date("Y-m-d");
+        $task->sharedUserList[] = $_SESSION['logged_user'];
         R::store($task);
         echo $data['name'];
-        //    return true;
     }
 
     function action_changetaskdescription() {
@@ -28,12 +28,13 @@ class Tasklist_Controller extends Controller {
         R::store($task);
         echo true;
     }
-    
+
     function action_gettaskinfo() {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
         echo $task;
     }
+
     function action_changeenddate() {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
@@ -41,4 +42,5 @@ class Tasklist_Controller extends Controller {
         R::store($task);
         echo $data;
     }
+
 }
