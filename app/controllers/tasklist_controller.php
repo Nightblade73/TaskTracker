@@ -15,6 +15,8 @@ class Tasklist_Controller extends Controller {
         $data = $_POST;
         $task = R::dispense('tasks');
         $task->task_name = $data['name'];
+        $task->date_begin = date("d/m/Y");
+        $task->date_end = date("d/m/Y");
         R::store($task);
         echo $data['name'];
         //    return true;

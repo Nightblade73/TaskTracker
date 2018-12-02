@@ -1,6 +1,12 @@
-<script src="../../js/script.js"></script>
 <link rel="stylesheet/less" type="text/css" href="../../css/tasklist-styles.less" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
+
+<link href="../../css/datepicker/bootstrap-datepicker3.standalone.css" rel="stylesheet">
+<script src="../../js/bootstrap-datepicker.js"></script>
+<script src="../../locales/bootstrap-datepicker.ru.min.js"></script>
+
+<script src="../../js/script.js"></script>
+
 
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="#">
@@ -28,7 +34,7 @@
     foreach ($tasks as $task) {
         echo '<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
                 <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
-                data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="' 
+                data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="'
         . $task->task_name . '"/></div>';
     }
     ?>
@@ -102,7 +108,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <input id="add" class="btn btn-primary" type="button" data-dismiss="modal" value="Добавить">
+                    <input id="add" class="btn btn-primary" type="button" data-dismiss="modal" value="Добавить" aria-hidden="true">
                 </div>
             </form>
         </div>
@@ -114,7 +120,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title task-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" id="task-close-but" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -123,17 +129,18 @@
                     <div class="form-group">
                         <label for="text">Описание задачи:</label>
                         <a id="change-desc" href="#" class="float-right">Редактировать</a>
-                        <a id="cancel-desc" href="#" class="float-right" >Отмена</a>
+                        <a id="cancel-desc" href="#" class="float-right" hidden>Отмена</a>
                         <textarea type="text" class="form-control" id="description" disabled="true" >
                             <?php
                             $task = R::findOne('tasks', "task_name = ?", array($data['name']));
                             ?>
                         </textarea>
-                        <input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="button" value="Добавить" >
+                        <input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Сохранить" hidden>
                     </div>
-                    <div class="form-group">
-                        <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd">
+                    <div class="input-daterange input-group" id="datepicker">
+                        <input type="date" class="input-sm form-control" name="start" />
+                        <span class="input-group-addon">to</span>
+                        <input type="date" class="input-sm form-control" name="end" />
                     </div>
                     <div class="form-group form-check">
                         <label class="form-check-label">
