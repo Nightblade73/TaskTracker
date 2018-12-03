@@ -146,6 +146,15 @@
                             <input type="date" class="form-control" name="end"/>
                         </div>
                     </div>
+                    <div class="form-group priority">
+                        <label for="select">Приоритет:</label>
+                        <select class="btn btn-primary dropdown-toggle priority-select" name="priority">
+                            <option class="btn-primary priority-item" value="btn-primary">Нет приоритета</a>
+                            <option class="btn-success priority-item" value="btn-success">Маленький</a>
+                            <option class="btn-warning priority-item" value="btn-warning">Средний</a>
+                            <option class="btn-danger priority-item"value="btn-danger ">Высокий</a>
+                        </select>
+                    </div>
                 </form>
                 <form class="comments" action="">
                     <label for="text">Комментарии:</label>

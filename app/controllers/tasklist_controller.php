@@ -57,7 +57,15 @@ class Tasklist_Controller extends Controller {
         $_SESSION['logged_user']->ownCommentsList[] = $comment;
         R::store($task);
         R::store($_SESSION['logged_user']);
-        echo $comment;
+        $user = $comment->users;
+        echo json_encode($comment);
     }
-
+    
+    function action_changepriority() {
+        $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $task->priority = $data['prior'];
+        R::store($task);
+        echo $data['prior'];
+    }
 }

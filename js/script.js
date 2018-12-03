@@ -79,7 +79,15 @@ $(document).ready(function () {
             data: {name: $('.task-title').html(),
                 comm: $comment},
             success: function (data, textStatus, jqXHR) {
-                console.log(data);
+                var $json = JSON.parse(data);
+                $('.comments').append('<div class="form-group added-comment">' +
+                        '<p ><b>' + $json.users.login + '</b></p>' +
+                        '<p>' + timeConverter($json.time) + '</p></br>' +
+                        '<p>' + $json.comment + '</p>' +
+                        '</div>');
+                $('.comments').scrollTop($('.comments').children().length * 70);
+                $('#comment').val("");
+                $('#comment').focus();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
@@ -94,6 +102,9 @@ $(document).ready(function () {
         $('input[name="begin"]').val("");
         $('input[name="end"]').val("");
         $('.added-comment').remove();
+        $('.priority-select option:selected').each(function () {
+            this.selected = false;
+        });
         $('.task-title').html(this.value);
         $.ajax({
             url: "http://localhost/tasklist/gettaskinfo",
@@ -112,6 +123,9 @@ $(document).ready(function () {
                             '<p>' + item.comment + '</p>' +
                             '</div>');
                 });
+                $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
+                $(".priority-select").addClass($json.priority);
+                $(".priority-select option[value='" + $json.priority + "']").attr("selected", "selected");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
@@ -128,7 +142,25 @@ $(document).ready(function () {
         e.preventDefault();
         $('#task-name').val("");
     });
-
+//выбор приоритета    
+    $(".priority-select").change(function (e) {
+        e.preventDefault();
+        $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
+        $(".priority-select").addClass($(".priority-select").select().val());
+        $.ajax({
+            url: "http://localhost/tasklist/changepriority",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                prior: $(".priority-select").select().val()},
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
 //изменения даты окончания
     $('input[name="end"]').change(function (e) {
         e.preventDefault();
