@@ -32,7 +32,11 @@ class Tasklist_Controller extends Controller {
     function action_gettaskinfo() {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
-        echo $task;
+        $comments = $task->ownCommentsList;
+        foreach ($comments as $comment){
+            $user = $comment->users;
+        }
+        echo json_encode($task);
     }
 
     function action_changeenddate() {
@@ -49,11 +53,11 @@ class Tasklist_Controller extends Controller {
         $comment = R::dispense('comments');
         $comment->comment = $data['comm'];
         $comment->time = time();
-        $comment->ownTasks = $task;
-        $comment->ownUsers = $_SESSION['logged_user'];
-        R::store($comment);
-
-        echo array($data);
+        $task->ownCommentsList[] = $comment;
+        $_SESSION['logged_user']->ownCommentsList[] = $comment;
+        R::store($task);
+        R::store($_SESSION['logged_user']);
+        echo $comment;
     }
 
 }

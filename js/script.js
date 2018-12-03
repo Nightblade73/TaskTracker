@@ -101,6 +101,13 @@ $(document).ready(function () {
                 $('#description').val($json.description);
                 $('input[name="begin"]').val($json.date_begin);
                 $('input[name="end"]').val($json.date_end);
+                $json.ownComments.forEach(function (item, i, arr) {
+                    $('.comments').append('<div class="form-group">' +
+                            '<p ><b>' + item.users.login + '</b></p>' +
+                            '<p>' + timeConverter(item.time) + '</p></br>' +
+                            '<p>' + item.comment + '</p>' +
+                            '</div>');
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
@@ -114,6 +121,11 @@ $(document).ready(function () {
         $('#description').val("");
         $('input[name="begin"]').val("");
         $('input[name="end"]').val("");
+        var $children = $('.comments').children();
+
+        $children.forEach(function (item, i, arr) {
+            if(item)
+        };
     });
 //очистка поля имени задачи
     $("#add-task-but").click(function (e) {
@@ -162,5 +174,18 @@ $(document).ready(function () {
         $('#description').attr('disabled', true);
         $('#description').css('border', 'none');
         $("#cancel-desc").attr('hidden', true);
-    };
+    }
+
+//перевод времени из UNIX в привычный формат
+    function timeConverter(UNIX_timestamp) {
+        var a = new Date(UNIX_timestamp * 1000);
+        var year = a.getFullYear();
+        var month = a.getMonth();
+        var date = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var time = date + '.' + month + '.' + year + ' ' + hour + ':' + min + ':' + sec;
+        return time;
+    }
 });

@@ -31,9 +31,7 @@
 
 <div class="container-fluid">
     <?php
-    $tasks = R::findAll('tasks_users', "users_id = ?", array($_SESSION['logged_user']->id));
-    foreach ($tasks as $task_id) {
-        $task = R::findOne('tasks', "id = ?", array($task_id->tasks_id));
+    foreach ($_SESSION['logged_user']->sharedTasksList as $task) {
         echo '<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
                 <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
                 data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="'
@@ -134,9 +132,7 @@
                         <a id="change-desc" href="#" class="float-right">Редактировать</a>
                         <a id="cancel-desc" href="#" class="float-right" hidden>Отмена</a>
                         <textarea type="text" class="form-control" id="description" disabled="true" >
-                            <?php
-                            $task = R::findOne('tasks', "task_name = ?", array($data['name']));
-                            ?>
+
                         </textarea>
                         <input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Сохранить" hidden>
                     </div>
@@ -153,24 +149,7 @@
                 </form>
                 <form class="comments" action="">
                     <label for="text">Комментарии:</label>
-                    <div class="form-group">
-                        <p ><b>Автор</b></p>
-                        <p >Время</p>
-                        <p >
-                            Есть над чем задуматься: многие известные личности призывают нас к новым свершениям, 
-                            которые, в свою очередь, должны быть объявлены нарушающими общечеловеческие нормы этики и морали. 
-                        </p>
-                      <!--<input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Сохранить" hidden>-->
-                    </div>
-                    <div class="form-group">
-                        <p ><b>Автор</b></p>
-                        <p >Время</p>
-                        <p >
-                            Есть над чем задуматься: многие известные личности призывают нас к новым свершениям, 
-                            которые, в свою очередь, должны быть объявлены нарушающими общечеловеческие нормы этики и морали. 
-                        </p>
-                      <!--<input id="change-desc-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Сохранить" hidden>-->
-                    </div>
+
                 </form>
                 <form class="bottom-form" action="">
                     <div class="form-group">
