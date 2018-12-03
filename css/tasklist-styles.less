@@ -1,4 +1,6 @@
-
+ul.ui-autocomplete { 
+    z-index: 1100; 
+} 
 .modal-open{
     .modal.fade{
         .modal-dialog.modal-dialog-centered{
@@ -34,6 +36,7 @@
                     .right-form{
                         padding: 1rem;        
                         border-bottom:1px solid #e9ecef;
+
                         .form-group{
                             #description{
                                 border: none;
@@ -56,12 +59,91 @@
                         .priority{
                             display: inline-block;
                             margin: auto;
+                            position: relative;
+                            bottom: 2px;
                             .priority-select{
                                 -webkit-appearance: none;
                                 -moz-appearance: none;
                                 appearance: none;
+                                text-align: center;
+                                text-align-last: center;
                                 .priority-item{
-                                    
+
+                                }
+                            }
+                            p{
+                                margin-bottom: 0.5rem;
+                            }
+                        }
+                        .members{
+                            display: inline-block;
+                            margin: 0 0 0 5px;
+                            position: relative;
+                            bottom: 40px;
+                            p{
+                                margin-bottom: 0.75rem;
+                            }
+                            .list-inline{
+                                .member{
+                                    background-color: #dfe3e6;
+                                    border-radius: 25em;
+                                    color: #17394d;
+                                    cursor: pointer;
+                                    display: block;
+                                    float: left;
+                                    height: 32px;
+                                    margin: 0 4px 4px 0;
+                                    overflow: visible;
+                                    position: relative;
+                                    width: 32px;
+                                    text-decoration: none;
+                                    .member-initials{
+                                        display: block; 
+                                        font-size: 12px; 
+                                        font-weight: 700; 
+                                        height: 32px; 
+                                        left: 0; 
+                                        line-height: 32px; 
+                                        overflow: hidden; 
+                                        position: absolute; 
+                                        text-align: center; 
+                                        top: 0; 
+                                        width: 100%; 
+                                    }
+                                }
+                                .member:hover{background-color: #d9dce0; }
+                                .member:active{background-color: #d3d6d9; }
+                            }
+                            .new-member{
+                                display: inline-block;
+                                width: 32px;
+                                height: 32px;
+                                background-color: rgba(9,45,66,.08);
+                                border-radius: 2px;
+                                color: #6b808c;
+                                cursor: pointer;
+                                float: left;
+                                transition-property: background-color,border-color,box-shadow;
+                                transition-duration: 85ms;
+                                transition-timing-function: ease;
+                                .icon-add{
+                                    font-size: 12px;
+                                    height: 32px;
+                                    line-height: 16px;
+                                    padding: 4px;
+                                    width: 32px;
+                                }
+                            }
+                            .new-member:hover{background-color: #d9dce0; }
+                            .new-member:active{background-color: #d0d3d6; }
+                            .dropdown-menu{
+                                #input-name{
+                                    -webkit-appearance: none;
+                                    -moz-appearance: none;
+                                    appearance: none;
+                                }
+                                button{
+                                    width: 100%;
                                 }
                             }
                         }

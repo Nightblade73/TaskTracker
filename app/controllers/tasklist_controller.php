@@ -16,7 +16,7 @@ class Tasklist_Controller extends Controller {
         $task = R::dispense('tasks');
         $task->task_name = $data['name'];
         $task->date_begin = date("Y-m-d");
-        $task->sharedUserList[] = $_SESSION['logged_user'];
+        $task->sharedUsersList[] = $_SESSION['logged_user'];
         R::store($task);
         echo $data['name'];
     }
@@ -32,8 +32,9 @@ class Tasklist_Controller extends Controller {
     function action_gettaskinfo() {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $users = $task->sharedUsersList;
         $comments = $task->ownCommentsList;
-        foreach ($comments as $comment){
+        foreach ($comments as $comment) {
             $user = $comment->users;
         }
         echo json_encode($task);
@@ -60,7 +61,7 @@ class Tasklist_Controller extends Controller {
         $user = $comment->users;
         echo json_encode($comment);
     }
-    
+
     function action_changepriority() {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
@@ -68,4 +69,30 @@ class Tasklist_Controller extends Controller {
         R::store($task);
         echo $data['prior'];
     }
+
+    function action_addnewmember() {
+        $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $task->sharedUsersList[] = $data['mem'];
+        R::store($task);
+        echo json_encode($data);
+    }
+
+    function action_getnonmembers() {
+        $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $users = $task->sharedUsersList;
+        $ids = [];
+        foreach ($users as $user) {
+            array_push($ids, $user->id);
+        }
+        $nonmembers = R::find('users', "id != ?", $ids);
+        $nonmembers_logins = [];
+        foreach ($nonmembers as $nonmember) {
+            array_push($nonmembers_logins, $nonmember->login);
+        }
+        
+        echo json_encode($nonmembers_logins);
+    }
+
 }

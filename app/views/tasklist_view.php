@@ -1,10 +1,7 @@
 <link rel="stylesheet/less" type="text/css" href="../../css/tasklist-styles.less" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
-
-<link href="../../css/datepicker/bootstrap-datepicker3.standalone.css" rel="stylesheet">
-<script src="../../js/bootstrap-datepicker.js"></script>
-<script src="../../locales/bootstrap-datepicker.ru.min.js"></script>
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="../../js/script.js"></script>
 
 
@@ -147,15 +144,42 @@
                         </div>
                     </div>
                     <div class="form-group priority">
-                        <label for="select">Приоритет:</label>
-                        <select class="btn btn-primary dropdown-toggle priority-select" name="priority">
+                        <p>Приоритет:</p>
+                        <select class="btn btn-primary priority-select" name="priority">
                             <option class="btn-primary priority-item" value="btn-primary">Нет приоритета</a>
                             <option class="btn-success priority-item" value="btn-success">Маленький</a>
                             <option class="btn-warning priority-item" value="btn-warning">Средний</a>
                             <option class="btn-danger priority-item"value="btn-danger ">Высокий</a>
                         </select>
                     </div>
+                    <div class="form-group members">
+                        <p>Участники:</p>
+                        <div class="list-inline" id="list">
+
+                        </div>
+                        <div class="dropdown">
+                            <a class="new-member" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
+                                data-backdrop="static" data-keyboard="false">
+                                <img class="icon-add"src="../../img/ic/baseline_add_black_48dp.png"/>
+                            </a>
+                            <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
+                                <div class="form-group">
+                                    <label for="input-name">Имя участника</label>
+                                    <input id="input-name" type="text" class="form-control"  placeholder="login">
+                                    <script>
+                                        $("#input-name").autocomplete();
+                                    </script>
+                                </div>
+
+                                <!--                                <ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul>
+                                                                <div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div>-->
+                                <button type="submit" class="btn btn-primary add-new-member">Добавить</button>            
+                            </div> 
+                        </div>
+                    </div>
+
                 </form>
+
                 <form class="comments" action="">
                     <label for="text">Комментарии:</label>
 

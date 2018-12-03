@@ -1,12 +1,42 @@
-$('#sandbox-container .input-daterange').datepicker({
-    format: "dd/mm/yyyy",
-    autoclose: true,
-    todayHighlight: true
-});
 
 $(document).ready(function () {
 
+    $('#dropdownMenuButton  > li > a').click(function (e) {
+
+    });
+
+
+
+    $("#input-name").autocomplete({
+        delay: 0,
+        source: function (event, ui) {
+            $.ajax({
+                url: "http://localhost/tasklist/getnonmembers",
+                type: "POST",
+                data: {name: $('.task-title').html()},
+                success: function (data, textStatus, jqXHR) {
+                    var $json = JSON.parse(data);
+                    console.log($json);
+                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(event.term), "i");
+                    ui($.grep($json, function (item) {
+                        return matcher.test(item);
+                    }));
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+                }
+            });
+        },
+        select: function (event, ui) {
+            $("#input-name").val(ui.value);
+            event.stopPropagation();
+        }
+    });
+
+
     var $taskDescriptionOld;
+
+
 // Добавление новой задачи
     $("#add").click(function (e) {
         //  e.preventDefault();
@@ -95,6 +125,28 @@ $(document).ready(function () {
         });
         return false;
     });
+//добавление нового участница
+    $("#add-new-member").click(function (e) {
+        e.preventDefault();
+        var $member = $('#input-name').val().trim();
+        $('#input-name').autocomplete
+        $.ajax({
+            url: "http://localhost/tasklist/addnewmember",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                mem: $member},
+            success: function (data, textStatus, jqXHR) {
+                var $json = JSON.parse(data);
+//                    $('#list').append('<div class="member">' +
+//                            '<span class="member-initials" title="' + item.login + '">' + item.login.charAt(0).toUpperCase() + '</span>' +
+//                            '</div>');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();
@@ -102,6 +154,7 @@ $(document).ready(function () {
         $('input[name="begin"]').val("");
         $('input[name="end"]').val("");
         $('.added-comment').remove();
+        $('.member').remove();
         $('.priority-select option:selected').each(function () {
             this.selected = false;
         });
@@ -126,6 +179,11 @@ $(document).ready(function () {
                 $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
                 $(".priority-select").addClass($json.priority);
                 $(".priority-select option[value='" + $json.priority + "']").attr("selected", "selected");
+                $json.sharedUsers.forEach(function (item, i, arr) {
+                    $('#list').append('<div class="member">' +
+                            '<span class="member-initials" title="' + item.login + '">' + item.login.charAt(0).toUpperCase() + '</span>' +
+                            '</div>');
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
@@ -153,7 +211,7 @@ $(document).ready(function () {
             data: {name: $('.task-title').html(),
                 prior: $(".priority-select").select().val()},
             success: function (data, textStatus, jqXHR) {
-                console.log(data);
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
