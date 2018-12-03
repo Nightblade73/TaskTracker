@@ -90,6 +90,10 @@ $(document).ready(function () {
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();
+        $('#description').val("");
+        $('input[name="begin"]').val("");
+        $('input[name="end"]').val("");
+        $('.added-comment').remove();
         $('.task-title').html(this.value);
         $.ajax({
             url: "http://localhost/tasklist/gettaskinfo",
@@ -102,7 +106,7 @@ $(document).ready(function () {
                 $('input[name="begin"]').val($json.date_begin);
                 $('input[name="end"]').val($json.date_end);
                 $json.ownComments.forEach(function (item, i, arr) {
-                    $('.comments').append('<div class="form-group">' +
+                    $('.comments').append('<div class="form-group added-comment">' +
                             '<p ><b>' + item.users.login + '</b></p>' +
                             '<p>' + timeConverter(item.time) + '</p></br>' +
                             '<p>' + item.comment + '</p>' +
@@ -118,14 +122,6 @@ $(document).ready(function () {
     $("#task-close-but").click(function (e) {
         e.preventDefault();
         changeState();
-        $('#description').val("");
-        $('input[name="begin"]').val("");
-        $('input[name="end"]').val("");
-        var $children = $('.comments').children();
-
-        $children.forEach(function (item, i, arr) {
-            if(item)
-        };
     });
 //очистка поля имени задачи
     $("#add-task-but").click(function (e) {
