@@ -76,23 +76,27 @@ ul.ui-autocomplete {
                             }
                         }
                         .members{
+                            width: 320px;
                             display: inline-block;
                             margin: 0 0 0 5px;
                             position: relative;
-                            bottom: 40px;
+                            bottom: -10px;
                             p{
                                 margin-bottom: 0.75rem;
                             }
                             .list-inline{
+                                display: inline-block;
+                                max-width: 290px;
+                                overflow: auto;
                                 .member{
                                     background-color: #dfe3e6;
                                     border-radius: 25em;
                                     color: #17394d;
                                     cursor: pointer;
-                                    display: block;
+                                    display: inline-block;
                                     float: left;
                                     height: 32px;
-                                    margin: 0 4px 4px 0;
+                                    margin-right: 4px;
                                     overflow: visible;
                                     position: relative;
                                     width: 32px;
@@ -146,6 +150,9 @@ ul.ui-autocomplete {
                                     width: 100%;
                                 }
                             }
+                        }
+                        .dropdown{
+                            display: inline-block;
                         }
                     }
                     .bottom-form{

@@ -126,20 +126,19 @@ $(document).ready(function () {
         return false;
     });
 //добавление нового участница
-    $("#add-new-member").click(function (e) {
+    $(".add-new-member").click(function (e) {
         e.preventDefault();
         var $member = $('#input-name').val().trim();
-        $('#input-name').autocomplete
         $.ajax({
             url: "http://localhost/tasklist/addnewmember",
             type: "POST",
             data: {name: $('.task-title').html(),
                 mem: $member},
             success: function (data, textStatus, jqXHR) {
-                var $json = JSON.parse(data);
-//                    $('#list').append('<div class="member">' +
-//                            '<span class="member-initials" title="' + item.login + '">' + item.login.charAt(0).toUpperCase() + '</span>' +
-//                            '</div>');
+                var $json = JSON.parse(data);               
+                    $('#list').append('<div class="member">' +
+                            '<span class="member-initials" title="' + $json.mem + '">' + $json.mem.charAt(0).toUpperCase() + '</span>' +
+                            '</div>');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);

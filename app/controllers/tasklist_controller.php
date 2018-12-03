@@ -73,7 +73,8 @@ class Tasklist_Controller extends Controller {
     function action_addnewmember() {
         $data = $_POST;
         $task = R::findOne('tasks', "task_name = ?", array($data['name']));
-        $task->sharedUsersList[] = $data['mem'];
+        $user = R::findOne('users', "login = ?", array($data['mem']));
+        $task->sharedUsersList[] = $user;
         R::store($task);
         echo json_encode($data);
     }
@@ -91,7 +92,6 @@ class Tasklist_Controller extends Controller {
         foreach ($nonmembers as $nonmember) {
             array_push($nonmembers_logins, $nonmember->login);
         }
-        
         echo json_encode($nonmembers_logins);
     }
 
