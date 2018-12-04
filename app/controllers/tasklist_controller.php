@@ -87,12 +87,24 @@ class Tasklist_Controller extends Controller {
         foreach ($users as $user) {
             array_push($ids, $user->id);
         }
-        $nonmembers = R::find('users', "id != ?", $ids);
+        $nonmembers = R::find('users', "id NOT IN ('".implode("','", $ids)."')");
         $nonmembers_logins = [];
         foreach ($nonmembers as $nonmember) {
             array_push($nonmembers_logins, $nonmember->login);
         }
         echo json_encode($nonmembers_logins);
+    }
+    
+    function action_showinfomember() {
+        $data = $_POST;
+        $user = R::findOne('users', "login = ?", array($data['login']));
+        echo json_encode($user);
+    }
+    
+    function action_deletemember() {
+        $data = $_POST;
+        $user = R::findOne('users', "login = ?", array($data['login']));
+        echo json_encode($user);
     }
 
 }

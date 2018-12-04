@@ -1,38 +1,21 @@
 
 $(document).ready(function () {
 
-    $('#dropdownMenuButton  > li > a').click(function (e) {
-
-    });
-
-
+    var $nonMembers = [];
 
     $("#input-name").autocomplete({
         delay: 0,
         source: function (event, ui) {
-            $.ajax({
-                url: "http://localhost/tasklist/getnonmembers",
-                type: "POST",
-                data: {name: $('.task-title').html()},
-                success: function (data, textStatus, jqXHR) {
-                    var $json = JSON.parse(data);
-                    console.log($json);
-                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(event.term), "i");
-                    ui($.grep($json, function (item) {
-                        return matcher.test(item);
-                    }));
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
-                }
-            });
+            var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(event.term), "i");
+            ui($.grep($nonMembers, function (item) {
+                return matcher.test(item);
+            }));
         },
         select: function (event, ui) {
             $("#input-name").val(ui.value);
             event.stopPropagation();
         }
     });
-
 
     var $taskDescriptionOld;
 
@@ -135,10 +118,27 @@ $(document).ready(function () {
             data: {name: $('.task-title').html(),
                 mem: $member},
             success: function (data, textStatus, jqXHR) {
-                var $json = JSON.parse(data);               
-                    $('#list').append('<div class="member">' +
-                            '<span class="member-initials" title="' + $json.mem + '">' + $json.mem.charAt(0).toUpperCase() + '</span>' +
-                            '</div>');
+                var $json = JSON.parse(data);
+                $('#list').append('<div class="member added-new-member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="' + $json.mem + '">' +
+                        '<span class="member-initials" title="' + $json.mem + '">' + $json.mem.charAt(0).toUpperCase() + '</span>' +
+                        '</div>');
+                $('.added-new-member').click(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "http://localhost/tasklist/showinfomember",
+                        type: "POST",
+                        data: {login: e.target.title},
+                        success: function (data, textStatus, jqXHR) {
+                            var $json = JSON.parse(data);
+                            console.log(data);
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+                        }
+                    });
+                    return false;
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
@@ -146,6 +146,7 @@ $(document).ready(function () {
         });
         return false;
     });
+
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();
@@ -154,6 +155,7 @@ $(document).ready(function () {
         $('input[name="end"]').val("");
         $('.added-comment').remove();
         $('.member').remove();
+        $nonMembers.splice(0, $nonMembers.length);
         $('.priority-select option:selected').each(function () {
             this.selected = false;
         });
@@ -179,9 +181,41 @@ $(document).ready(function () {
                 $(".priority-select").addClass($json.priority);
                 $(".priority-select option[value='" + $json.priority + "']").attr("selected", "selected");
                 $json.sharedUsers.forEach(function (item, i, arr) {
-                    $('#list').append('<div class="member">' +
+                    $('#list').append('<div class="member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >' +
                             '<span class="member-initials" title="' + item.login + '">' + item.login.charAt(0).toUpperCase() + '</span>' +
                             '</div>');
+                });
+                //просмотреть информацию об участнике
+                $(".member").click(function (e) {
+                    $.ajax({
+                        url: "http://localhost/tasklist/showinfomember",
+                        type: "POST",
+                        data: {login: e.target.title},
+                        success: function (data, textStatus, jqXHR) {
+                            var $json = JSON.parse(data);
+                            console.log($json);
+                            $('p[name="login"]').html($json.login);
+                            $('p[name="email"]').html($json.email);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+                        }
+                    });
+                    e.preventDefault();
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: "http://localhost/tasklist/getnonmembers",
+            type: "POST",
+            data: {name: $('.task-title').html()},
+            success: function (data, textStatus, jqXHR) {
+                var $json = JSON.parse(data);
+                $json.forEach(function (item, i, arr) {
+                    $nonMembers.push(item);
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -223,6 +257,22 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             url: "http://localhost/tasklist/changeenddate",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                date: $('input[name="end"]').val()},
+            success: function (data, textStatus, jqXHR) {
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+    });
+//удалить пользователя
+    $('.del-member').change(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/deletemember",
             type: "POST",
             data: {name: $('.task-title').html(),
                 date: $('input[name="end"]').val()},

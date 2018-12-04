@@ -152,17 +152,26 @@
                             <option class="btn-danger priority-item"value="btn-danger ">Высокий</a>
                         </select>
                     </div>
-                    <div class="form-group members">
+                    <div class="form-group members dropdown">
                         <p>Участники:</p>
-                        <div class="list-inline" id="list">
+                        <div class="" id="list"> 
+                            <div class="dropdown-menu p-2 member-info" aria-labelledby="dropShowMemberInfo">
+                                <div class="form-group">
+                                    <label for="p">Имя участника:</label>
+                                    <p name="login"></p>
+                                     <label for="p">Почта:</label>
+                                    <p name="email"></p>
+                                </div>
+                                <button type="submit" class="btn btn-danger del-member">Удалить</button>            
+                            </div> 
 
                         </div>
                         <div class="dropdown">
-                            <a class="new-member" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
-                                data-backdrop="static" data-keyboard="false">
+                            <a class="new-member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                               data-backdrop="static" data-keyboard="false">
                                 <img class="icon-add"src="../../img/ic/baseline_add_black_48dp.png"/>
                             </a>
-                            <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-menu p-2" aria-labelledby="dropDownNewMember">
                                 <div class="form-group">
                                     <label for="input-name">Имя участника</label>
                                     <input id="input-name" type="text" class="form-control"  placeholder="login">
@@ -170,9 +179,6 @@
                                         $("#input-name").autocomplete();
                                     </script>
                                 </div>
-
-                                <!--                                <ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul>
-                                                                <div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div>-->
                                 <button type="submit" class="btn btn-primary add-new-member">Добавить</button>            
                             </div> 
                         </div>
