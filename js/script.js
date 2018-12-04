@@ -18,6 +18,8 @@ $(document).ready(function () {
     });
 
     var $taskDescriptionOld;
+    
+    var $currTarget;
 
 
 // Добавление новой задачи
@@ -45,7 +47,6 @@ $(document).ready(function () {
                         data: {name: $('.task-title').html()},
                         success: function (data, textStatus, jqXHR) {
                             var $json = JSON.parse(data);
-                            console.log($json);
                             $('#description').val($json.description);
                             $('input[name="begin"]').val($json.date_begin);
                             $('input[name="end"]').val($json.date_end);
@@ -54,6 +55,7 @@ $(document).ready(function () {
                             console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
                         }
                     });
+                    return false;
                 });
                 $('.newtask').removeClass('newtask');
                 $('#add-Task').modal('toggle');
@@ -108,7 +110,7 @@ $(document).ready(function () {
         });
         return false;
     });
-//добавление нового участница
+//добавление нового участниrа
     $(".add-new-member").click(function (e) {
         e.preventDefault();
         var $member = $('#input-name').val().trim();
@@ -119,32 +121,31 @@ $(document).ready(function () {
                 mem: $member},
             success: function (data, textStatus, jqXHR) {
                 var $json = JSON.parse(data);
-                $('#list').append('<div class="member added-new-member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="' + $json.mem + '">' +
+                $('#list').append('<div class="member added-new-member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
                         '<span class="member-initials" title="' + $json.mem + '">' + $json.mem.charAt(0).toUpperCase() + '</span>' +
                         '</div>');
                 $('.added-new-member').click(function (e) {
                     e.preventDefault();
+                    $currTarget = e.currentTarget;
                     $.ajax({
                         url: "http://localhost/tasklist/showinfomember",
                         type: "POST",
                         data: {login: e.target.title},
                         success: function (data, textStatus, jqXHR) {
                             var $json = JSON.parse(data);
-                            console.log(data);
-
+                            $('p[name="login"]').html($json.login);
+                            $('p[name="email"]').html($json.email);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
                         }
                     });
-                    return false;
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
             }
         });
-        return false;
     });
 
 //просмотреть информацию о задаче
@@ -187,13 +188,13 @@ $(document).ready(function () {
                 });
                 //просмотреть информацию об участнике
                 $(".member").click(function (e) {
+                    $currTarget = e.currentTarget;
                     $.ajax({
                         url: "http://localhost/tasklist/showinfomember",
                         type: "POST",
                         data: {login: e.target.title},
                         success: function (data, textStatus, jqXHR) {
                             var $json = JSON.parse(data);
-                            console.log($json);
                             $('p[name="login"]').html($json.login);
                             $('p[name="email"]').html($json.email);
                         },
@@ -252,6 +253,23 @@ $(document).ready(function () {
         });
         return false;
     });
+//удалить пользователя
+    $('.btn-del-member').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/deletemember",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                login: $('p[name="login"]').html()},
+            success: function (data, textStatus, jqXHR) {
+
+                $currTarget.remove();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+    });
 //изменения даты окончания
     $('input[name="end"]').change(function (e) {
         e.preventDefault();
@@ -267,23 +285,9 @@ $(document).ready(function () {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
             }
         });
+        return false;
     });
-//удалить пользователя
-    $('.del-member').change(function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "http://localhost/tasklist/deletemember",
-            type: "POST",
-            data: {name: $('.task-title').html(),
-                date: $('input[name="end"]').val()},
-            success: function (data, textStatus, jqXHR) {
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
-            }
-        });
-    });
 //изменения состояния редактирования описания    
     $("#change-desc").click(function (e) {
         e.preventDefault();

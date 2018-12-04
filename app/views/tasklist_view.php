@@ -159,10 +159,10 @@
                                 <div class="form-group">
                                     <label for="p">Имя участника:</label>
                                     <p name="login"></p>
-                                     <label for="p">Почта:</label>
+                                    <label for="p">Почта:</label>
                                     <p name="email"></p>
                                 </div>
-                                <button type="submit" class="btn btn-danger del-member">Удалить</button>            
+                                <button type="submit" class="btn btn-danger btn-del-member">Удалить</button>   
                             </div> 
 
                         </div>

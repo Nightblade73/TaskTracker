@@ -87,24 +87,27 @@ class Tasklist_Controller extends Controller {
         foreach ($users as $user) {
             array_push($ids, $user->id);
         }
-        $nonmembers = R::find('users', "id NOT IN ('".implode("','", $ids)."')");
+        $nonmembers = R::find('users', "id NOT IN ('" . implode("','", $ids) . "')");
         $nonmembers_logins = [];
         foreach ($nonmembers as $nonmember) {
             array_push($nonmembers_logins, $nonmember->login);
         }
         echo json_encode($nonmembers_logins);
     }
-    
+
     function action_showinfomember() {
         $data = $_POST;
         $user = R::findOne('users', "login = ?", array($data['login']));
         echo json_encode($user);
     }
-    
+
     function action_deletemember() {
         $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
         $user = R::findOne('users', "login = ?", array($data['login']));
-        echo json_encode($user);
+        $tasks_users = R::findOne('tasks_users', "users_id = ? AND tasks_id = ?", array($user->id, $task->id));
+        R::trash($tasks_users);
+        echo json_encode($tasks_users);
     }
 
 }
