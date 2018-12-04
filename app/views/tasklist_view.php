@@ -19,8 +19,8 @@
         Добавить задачу
     </button>
     <form class="form-inline float-right">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+        <input class="form-control mr-sm-2 input-search" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0 btn-search" type="submit">Поиск</button>
     </form>
     <a class="nav-item nav-link disabled" href="tasklist/logout">Выйти</a>
 </nav>
@@ -118,6 +118,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title task-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" id="delete-confirm" class="btn btn-danger float-righ" data-dismiss="modal" aria-label="Close" >
+                    Удалить задание?
+                </button>
+                <a id="task-del-but" class="float-right">
+                    <img class="icon-delete-task" src="../../img/ic/baseline_delete_outline_black_48dp.png" aria-hidden="true"/>
+                </a> 
                 <button type="button" id="task-close-but" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

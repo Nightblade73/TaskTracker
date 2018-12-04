@@ -18,8 +18,10 @@ $(document).ready(function () {
     });
 
     var $taskDescriptionOld;
-    
+
     var $currTarget;
+
+    var $currTask;
 
 
 // Добавление новой задачи
@@ -35,29 +37,8 @@ $(document).ready(function () {
             type: "POST",
             data: {name: $taskname},
             success: function (data, textStatus, jqXHR) {
-                $('.container-fluid').append('<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">\n\
-        <input type="button" class="card-header btn btn-primary task newtask" data-toggle="modal" data-target="#edit-Task" \n\
-        data-backdrop="static" data-keyboard="false" value="' + data + '"/></div>');
-                $('.newtask').click(function (e) {
-                    e.preventDefault();
-                    $('.task-title').html(this.value);
-                    $.ajax({
-                        url: "http://localhost/tasklist/gettaskinfo",
-                        type: "POST",
-                        data: {name: $('.task-title').html()},
-                        success: function (data, textStatus, jqXHR) {
-                            var $json = JSON.parse(data);
-                            $('#description').val($json.description);
-                            $('input[name="begin"]').val($json.date_begin);
-                            $('input[name="end"]').val($json.date_end);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
-                        }
-                    });
-                    return false;
-                });
-                $('.newtask').removeClass('newtask');
+                var $json = JSON.parse(data);
+                appendTasksToList($json.task_name);
                 $('#add-Task').modal('toggle');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -151,6 +132,157 @@ $(document).ready(function () {
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();
+        $currTask = e.currentTarget.offsetParent;
+        showTaskInformation(this.value);
+    });
+//очистка полей
+    $("#task-close-but").click(function (e) {
+        e.preventDefault();
+        $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
+        changeState();
+    });
+//очистка поля имени задачи
+    $("#add-task-but").click(function (e) {
+        e.preventDefault();
+        $('#task-name').val("");
+    });
+//выбор приоритета    
+    $(".priority-select").change(function (e) {
+        $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
+        $(".priority-select").addClass($(".priority-select").select().val());
+        $.ajax({
+            url: "http://localhost/tasklist/changepriority",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                prior: $(".priority-select").select().val()},
+            success: function (data, textStatus, jqXHR) {
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
+//удалить пользователя
+    $('.btn-del-member').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/deletemember",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                login: $('p[name="login"]').html()},
+            success: function (data, textStatus, jqXHR) {
+
+                $currTarget.remove();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+    });
+//удалить задание
+    $('#task-del-but').click(function (e) {
+        $('#delete-confirm').css("display", "inline-block").fadeOut(7000);
+    });
+
+    $('#delete-confirm').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/deletetask",
+            type: "POST",
+            data: {name: $('.task-title').html()},
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                $currTask.remove();
+                $('#task-close-but').click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
+//изменения даты окончания
+    $('input[name="end"]').change(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/changeenddate",
+            type: "POST",
+            data: {name: $('.task-title').html(),
+                date: $('input[name="end"]').val()},
+            success: function (data, textStatus, jqXHR) {
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
+
+//поиск задач
+    $('.btn-search').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "http://localhost/tasklist/search",
+            type: "POST",
+            data: {name: $('.input-search').val()},
+            success: function (data, textStatus, jqXHR) {
+                $('.card').remove();
+                var $json = JSON.parse(data);
+                console.log($json);
+                $json.sharedUsers.forEach(function (item, i, arr) {
+                    appendTasksToList(item.task_name);
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+        return false;
+    });
+
+//изменения состояния редактирования описания    
+    $("#change-desc").click(function (e) {
+        e.preventDefault();
+        $taskDescriptionOld = $('#description').val();
+        $('#change-desc-submit').removeAttr('hidden');
+        $('#cancel-desc').removeAttr('hidden');
+        $('#description').attr('disabled', false);
+        $('#description').css('border', '1px solid #ced4da');
+        $("#change-desc").attr('hidden', true);
+        return false;
+    });
+//изменения состояния редактирования описания  
+    $("#cancel-desc").click(function (e) {
+        e.preventDefault();
+        $('#description').val($taskDescriptionOld);
+        changeState();
+        return false;
+    });
+//отмена редактирования
+    function changeState() {
+        $('#change-desc-submit').attr('hidden', true);
+        $('#change-desc').removeAttr('hidden');
+        $('#description').attr('disabled', true);
+        $('#description').css('border', 'none');
+        $("#cancel-desc").attr('hidden', true);
+    }
+
+    function appendTasksToList(data) {
+        $('.container-fluid').append('<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">\n\
+        <input type="button" class="card-header btn btn-primary task newtask" data-toggle="modal" data-target="#edit-Task" \n\
+        data-backdrop="static" data-keyboard="false" value="' + data + '"/></div>');
+        $('.newtask').click(function (e) {
+            e.preventDefault();
+            $currTask = e.currentTarget.offsetParent;
+            showTaskInformation(this.value);
+        });
+        $('.newtask').removeClass('newtask');
+    }
+    function showTaskInformation(value) {
         $('#description').val("");
         $('input[name="begin"]').val("");
         $('input[name="end"]').val("");
@@ -160,7 +292,7 @@ $(document).ready(function () {
         $('.priority-select option:selected').each(function () {
             this.selected = false;
         });
-        $('.task-title').html(this.value);
+        $('.task-title').html(value);
         $.ajax({
             url: "http://localhost/tasklist/gettaskinfo",
             type: "POST",
@@ -178,7 +310,6 @@ $(document).ready(function () {
                             '<p>' + item.comment + '</p>' +
                             '</div>');
                 });
-                $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
                 $(".priority-select").addClass($json.priority);
                 $(".priority-select option[value='" + $json.priority + "']").attr("selected", "selected");
                 $json.sharedUsers.forEach(function (item, i, arr) {
@@ -223,96 +354,6 @@ $(document).ready(function () {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
             }
         });
-    });
-//очистка полей
-    $("#task-close-but").click(function (e) {
-        e.preventDefault();
-        changeState();
-    });
-//очистка поля имени задачи
-    $("#add-task-but").click(function (e) {
-        e.preventDefault();
-        $('#task-name').val("");
-    });
-//выбор приоритета    
-    $(".priority-select").change(function (e) {
-        e.preventDefault();
-        $(".priority-select").removeClass("btn-primary btn-success btn-warning btn-danger");
-        $(".priority-select").addClass($(".priority-select").select().val());
-        $.ajax({
-            url: "http://localhost/tasklist/changepriority",
-            type: "POST",
-            data: {name: $('.task-title').html(),
-                prior: $(".priority-select").select().val()},
-            success: function (data, textStatus, jqXHR) {
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
-            }
-        });
-        return false;
-    });
-//удалить пользователя
-    $('.btn-del-member').click(function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "http://localhost/tasklist/deletemember",
-            type: "POST",
-            data: {name: $('.task-title').html(),
-                login: $('p[name="login"]').html()},
-            success: function (data, textStatus, jqXHR) {
-
-                $currTarget.remove();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
-            }
-        });
-    });
-//изменения даты окончания
-    $('input[name="end"]').change(function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "http://localhost/tasklist/changeenddate",
-            type: "POST",
-            data: {name: $('.task-title').html(),
-                date: $('input[name="end"]').val()},
-            success: function (data, textStatus, jqXHR) {
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
-            }
-        });
-        return false;
-    });
-
-//изменения состояния редактирования описания    
-    $("#change-desc").click(function (e) {
-        e.preventDefault();
-        $taskDescriptionOld = $('#description').val();
-        $('#change-desc-submit').removeAttr('hidden');
-        $('#cancel-desc').removeAttr('hidden');
-        $('#description').attr('disabled', false);
-        $('#description').css('border', '1px solid #ced4da');
-        $("#change-desc").attr('hidden', true);
-        return false;
-    });
-//изменения состояния редактирования описания  
-    $("#cancel-desc").click(function (e) {
-        e.preventDefault();
-        $('#description').val($taskDescriptionOld);
-        changeState();
-        return false;
-    });
-//отмена редактирования
-    function changeState() {
-        $('#change-desc-submit').attr('hidden', true);
-        $('#change-desc').removeAttr('hidden');
-        $('#description').attr('disabled', true);
-        $('#description').css('border', 'none');
-        $("#cancel-desc").attr('hidden', true);
     }
 
 //перевод времени из UNIX в привычный формат

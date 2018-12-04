@@ -2,10 +2,39 @@ ul.ui-autocomplete {
     z-index: 1100; 
 } 
 .modal-open{
-    .modal.fade{
+    #edit-Task{
         .modal-dialog.modal-dialog-centered{
             max-width: 900px !important;
             .modal-content{
+                .modal-header{
+                    #task-del-but{
+                        width: 32px;
+                        height: 32px;
+                        margin: auto 2rem auto auto;
+                        cursor: pointer;
+                        img{
+                            width: 100%;
+                            height: 89%;
+                            opacity: .5;
+                        }
+                    }
+                    #delete-confirm{
+                        display: none;
+                        height: 32px;
+                        padding: 3px;
+                        margin: auto 0 auto;
+                        position: relative;
+                        left: 540px;
+                    }
+                    #task-del-but:hover{
+                        img{
+                            opacity: .7;
+                        }
+                    }
+                    #task-close-but{
+                        margin: -1rem -1rem -1rem -1rem;
+                    }
+                }
                 .modal-body{
                     display: inline-block;
                     padding: 0;

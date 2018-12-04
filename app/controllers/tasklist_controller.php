@@ -16,9 +16,10 @@ class Tasklist_Controller extends Controller {
         $task = R::dispense('tasks');
         $task->task_name = $data['name'];
         $task->date_begin = date("Y-m-d");
+        $task->priority = "btn-primary";
         $task->sharedUsersList[] = $_SESSION['logged_user'];
         R::store($task);
-        echo $data['name'];
+        echo json_encode($task);
     }
 
     function action_changetaskdescription() {
@@ -108,6 +109,22 @@ class Tasklist_Controller extends Controller {
         $tasks_users = R::findOne('tasks_users', "users_id = ? AND tasks_id = ?", array($user->id, $task->id));
         R::trash($tasks_users);
         echo json_encode($tasks_users);
+    }
+
+    function action_deletetask() {
+        $data = $_POST;
+        $task = R::findOne('tasks', "task_name = ?", array($data['name']));
+        $comments = $task->ownCommentsList;
+        R::trashAll($comments);
+        R::trash($task);
+        $_SESSION['logged_user'] = R::findOne('users', $_SESSION['logged_user']->id);
+        echo json_encode($task);
+    }
+
+    function action_search() {
+        $data = $_POST;
+        $tasks = R::findAll('tasks', 'task_name LIKE "%' . $data['name'] . '%"');
+        echo json_encode($tasks);
     }
 
 }
