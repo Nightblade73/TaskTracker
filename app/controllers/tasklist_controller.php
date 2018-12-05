@@ -124,7 +124,35 @@ class Tasklist_Controller extends Controller {
     function action_search() {
         $data = $_POST;
         $tasks = R::findAll('tasks', 'task_name LIKE "%' . $data['name'] . '%"');
-        echo json_encode($tasks);
+        $tasks_names = [];
+        foreach ($tasks as $task) {
+            array_push($tasks_names, $task->task_name);
+        }
+        echo json_encode($tasks_names);
+    }
+
+    function action_filterbyname() {
+        $data = $_POST;
+        $tasks_order = R::findLike('tasks', ['task_name' => [$_SESSION['logged_user']->sharedTasksList]], ' ORDER BY task_name');
+        $tasks_names = [];
+        foreach ($tasks_order as $task) {
+            array_push($tasks_names, $task->task_name);
+        }
+        echo json_encode($tasks_names);
+    }
+
+    function action_filterbypriority() {
+        $data = $_POST;
+        $tasks_names = [];
+
+        foreach ($_SESSION['logged_user']->sharedTasksList as $task) {
+            if ($data['prior'] === $task->priority) {
+                array_push($tasks_names, $task->task_name);
+            } else if ($data['prior'] === "") {
+                array_push($tasks_names, $task->task_name);
+            }
+        }
+        echo json_encode($tasks_names);
     }
 
 }

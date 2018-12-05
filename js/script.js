@@ -128,6 +128,26 @@ $(document).ready(function () {
             }
         });
     });
+//сортировка по приоритету
+    $(".priority-filter").click(function (e) {
+        $.ajax({
+            url: "http://localhost/tasklist/filterbypriority",
+            type: "POST",
+            data: {prior: $(this).attr('data-value')},
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                $('.card').remove();
+                var $json = JSON.parse(data);
+                console.log($json);
+                $json.forEach(function (item, i, arr) {
+                    appendTasksToList(item);
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);
+            }
+        });
+    });
 
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
@@ -232,10 +252,9 @@ $(document).ready(function () {
                 $('.card').remove();
                 var $json = JSON.parse(data);
                 console.log($json);
-                $json.sharedUsers.forEach(function (item, i, arr) {
-                    appendTasksToList(item.task_name);
+                $json.forEach(function (item, i, arr) {
+                    appendTasksToList(item);
                 });
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText + '|\n' + textStatus + '|\n' + errorThrown);

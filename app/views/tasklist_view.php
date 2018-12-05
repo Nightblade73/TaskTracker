@@ -18,6 +18,22 @@
             data-target="#add-Task" data-backdrop="static" data-keyboard="false">
         Добавить задачу
     </button>
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+<!--            <button type="button" class="btn btn-secondary">От А-Я</button>
+            <button type="button" class="btn btn-secondary">От Я-А</button>-->
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Сортировка по приоритету
+            </button>
+            <ul class="dropdown-menu">
+                <a href="#" class="dropdown-item priority-filter" data-value="" tabIndex="-1">Все</a>
+                <a href="#" class="dropdown-item priority-filter" data-value="btn-primary" tabIndex="-1">Без приоритета</a>
+                <a href="#" class="dropdown-item priority-filter" data-value="btn-success" tabIndex="-1">Маленький</a>
+                <a href="#" class="dropdown-item priority-filter" data-value="btn-warning" tabIndex="-1">Средний</a>
+                <a href="#" class="dropdown-item priority-filter" data-value="btn-danger" tabIndex="-1">Высокий</a>
+            </ul>
+        </div>
+    </div>
     <form class="form-inline float-right">
         <input class="form-control mr-sm-2 input-search" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0 btn-search" type="submit">Поиск</button>
@@ -155,7 +171,7 @@
                             <option class="btn-primary priority-item" value="btn-primary">Нет приоритета</a>
                             <option class="btn-success priority-item" value="btn-success">Маленький</a>
                             <option class="btn-warning priority-item" value="btn-warning">Средний</a>
-                            <option class="btn-danger priority-item"value="btn-danger ">Высокий</a>
+                            <option class="btn-danger priority-item" value="btn-danger">Высокий</a>
                         </select>
                     </div>
                     <div class="form-group members dropdown">
