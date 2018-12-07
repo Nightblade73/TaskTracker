@@ -1,10 +1,21 @@
-.container-fluid{
+body{
+    background-image: url(../img/bg-tasklist.jpg);
+    /*background-size: 50px;*/
+
+    nav{
+        background-color: #fff0f0 !important;
+
+    }
+}
+.container-fluid{   
     .card-deck{
-        margin-top: 15px;
         input{
             border-color: none;
         }
     }
+    margin-top: 15px;
+    height: 100vh;
+
 }
 ul.ui-autocomplete { 
     z-index: 1100; 
@@ -13,8 +24,10 @@ ul.ui-autocomplete {
     #edit-Task{
         .modal-dialog.modal-dialog-centered{
             max-width: 900px !important;
-            .modal-content{
+            .modal-content{    
+                background-image: url(../img/bg-task.jpg);
                 .modal-header{
+                    border: none;
                     #task-del-but{
                         width: 32px;
                         height: 32px;
@@ -32,7 +45,7 @@ ul.ui-autocomplete {
                         padding: 3px;
                         margin: auto 0 auto;
                         position: relative;
-                        left: 540px;
+                        left: 500px;
                     }
                     #task-del-but:hover{
                         img{
@@ -57,10 +70,10 @@ ul.ui-autocomplete {
                         }
                         .form-group{
                             margin: 10px 0 10px 10px;
-                            border:1px solid #e9ecef;
                             border-radius: 1.5rem;
                             padding: 10px 0 10px 10px;
                             font-size: smaller;
+                            color: #000;
                             p{
                                 display: inline-block;
                                 margin:auto;
@@ -72,14 +85,20 @@ ul.ui-autocomplete {
                     }
                     .right-form{
                         padding: 1rem;        
-                        border-bottom:1px solid #e9ecef;
-
                         .form-group{
+                            margin-bottom: 2.7rem;
+                            .change-desc{
+                                color: #000;
+                            }
                             #description{
+                                background-color: transparent;
                                 border: none;
-                                background-color: white;
                                 min-height: 75px;
                                 max-height: 200px;
+                                color: black;
+                            }
+                            #description:hover{
+                                background-color: #00000021;
                             }
                             #change-desc-submit{
                                 margin-top: 5px !important;
@@ -88,9 +107,15 @@ ul.ui-autocomplete {
                         .date{
                             display: inline-block;
                             margin: auto;
+                            
                             .form-group{
                                 margin: auto;
                                 display: inline-block;
+                                input{
+                                    background-image: url(../img/bg-task.jpg);
+                                    color: #000;
+                                    border: none;
+                                }
                             }
                         }
                         .priority{
@@ -200,16 +225,21 @@ ul.ui-autocomplete {
                         padding:1rem;
                         display: inline-block;
                         width: 100%;
-                        border-top: 1px solid #e9ecef;
                         .form-group{
                             display: inline-flex;
                             margin: auto;
                             textarea{
+                                background: transparent;
                                 width: 745px;
                                 height: 63px;
                                 margin-right: 1rem;
                                 resize: none;
+                                border: none;
                                 border-radius: 1.5rem;
+                                color: #000;
+                            }
+                            .textarea:hover{
+                                background: #00000021;
                             }
                         }
                     }

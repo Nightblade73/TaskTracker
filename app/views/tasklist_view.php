@@ -111,7 +111,7 @@
                 <h5 class="modal-title task-title" id="exampleModalLongTitle">Modal title</h5>
 
                 <?php if ($_SESSION['logged_user']->role == 2): ?>
-                    <button type="button" id="delete-confirm" class="btn btn-danger float-righ" data-dismiss="modal" aria-label="Close" >
+                    <button type="button" id="delete-confirm" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close" >
                         Удалить задание?
                     </button>
                     <a id="task-del-but" class="float-right">
@@ -128,8 +128,8 @@
                 <form class="right-form" action="">
                     <div class="form-group">
                         <label for="text">Описание задачи:</label>
-                        <a id="change-desc" href="#" class="float-right">Редактировать</a>
-                        <a id="cancel-desc" href="#" class="float-right" hidden>Отмена</a>
+                        <a id="change-desc" class ="change-desc float-right" href="#" class="float-right">Редактировать</a>
+                        <a id="cancel-desc" class ="change-desc float-right" href="#" class="float-right" hidden>Отмена</a>
                         <textarea type="text" class="form-control" id="description" disabled="true" >
 
                         </textarea>
@@ -202,7 +202,7 @@
                 <form class="bottom-form" action="">
                     <div class="form-group">
                         <textarea type="text" class="form-control" id="comment"></textarea>
-                        <input id="add-comment-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Отправить" >
+                        <input id="add-comment-submit" class="btn btn-primary float-right my-sm-0" type="reset" value="Добавить" >
                     </div>
                 </form>
 

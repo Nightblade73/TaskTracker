@@ -260,7 +260,6 @@ $(document).ready(function () {
         $('#change-desc-submit').removeAttr('hidden');
         $('#cancel-desc').removeAttr('hidden');
         $('#description').attr('disabled', false);
-        $('#description').css('border', '1px solid #ced4da');
         $("#change-desc").attr('hidden', true);
         return false;
     });
@@ -276,7 +275,6 @@ $(document).ready(function () {
         $('#change-desc-submit').attr('hidden', true);
         $('#change-desc').removeAttr('hidden');
         $('#description').attr('disabled', true);
-        $('#description').css('border', 'none');
         $("#cancel-desc").attr('hidden', true);
     }
 

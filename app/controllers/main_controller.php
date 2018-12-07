@@ -3,37 +3,27 @@
 class Main_Controller extends Controller {
 
     function action_index($data = null) {
-        $this->view->generate('main_view.php', 'template_view.php',$data);
+        $this->view->generate('main_view.php', 'template_view.php', $data);
     }
 
     function action_login() {
         $data = $_POST;
         $errors = array();
-        if (isset($data['do_signin'])) {
-            $user = R::findOne('users', "login = ?", array($data['login']));
-            if ($user) {
-                if (password_verify($data['password'], $user->password)) {
-                    $_SESSION['logged_user'] = $user;
-                    header('Location: /tasklist');
-                } else {
-                    $errors[] = 'Неверный пароль';
-                }
-            } else {
-                $errors[] = 'Пользователь с таким логином не найден!';
-            }
-        }
 
+        $user = R::findOne('users', "login = ?", array($data['login']));
+        if ($user) {
+            if (password_verify($data['password'], $user->password)) {
+                $_SESSION['logged_user'] = $user;
+                echo json_encode('/tasklist');
+            } else {
+                $errors[] = 'Неверный пароль';
+            }
+        } else {
+            $errors[] = 'Пользователь с таким логином не найден!';
+        }
         if (!empty($errors)) {
             $data['error'] = array_shift($errors);
-            $this->action_index($data);
-            echo '<div style="color: red;">' . array_shift($errors) .
-            '</div><hr>';
-            return;
+            echo json_encode($data);
         }
-
-        $this->action_index($data);
     }
-
 }
-
-?>
