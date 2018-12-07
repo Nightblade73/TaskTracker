@@ -2,7 +2,6 @@
 $(document).ready(function () {
 
     var $nonMembers = [];
-
     $("#input-name").autocomplete({
         delay: 0,
         source: function (event, ui) {
@@ -16,17 +15,12 @@ $(document).ready(function () {
             event.stopPropagation();
         }
     });
-
     var $taskDescriptionOld;
-
     var $currTarget;
-
     var $currTask;
-
-
 // Добавление новой задачи
     $("#add").click(function (e) {
-        //  e.preventDefault();
+//  e.preventDefault();
         var $taskname = $('#task-name').val().trim();
         if ($taskname === '') {
             alert("Пустая строка");
@@ -148,7 +142,6 @@ $(document).ready(function () {
             }
         });
     });
-
 //просмотреть информацию о задаче
     $(".task").click(function (e) {
         e.preventDefault();
@@ -203,9 +196,8 @@ $(document).ready(function () {
     });
 //удалить задание
     $('#task-del-but').click(function (e) {
-        $('#delete-confirm').css("display", "inline-block").fadeOut(7000);
+        $('#delete-confirm').css("display", "inline-block").fadeOut(3000);
     });
-
     $('#delete-confirm').click(function (e) {
         e.preventDefault();
         $.ajax({
@@ -240,7 +232,6 @@ $(document).ready(function () {
         });
         return false;
     });
-
 //поиск задач
     $('.btn-search').click(function (e) {
         e.preventDefault();
@@ -262,7 +253,6 @@ $(document).ready(function () {
         });
         return false;
     });
-
 //изменения состояния редактирования описания    
     $("#change-desc").click(function (e) {
         e.preventDefault();
@@ -291,8 +281,10 @@ $(document).ready(function () {
     }
 
     function appendTasksToList(data) {
-        $('.container-fluid').append('<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">\n\
-        <input type="button" class="card-header btn btn-primary task newtask" data-toggle="modal" data-target="#edit-Task" \n\
+        var $random = getRandomColor(Math.floor(Math.random() * (7 - 0 + 1)) + 0);
+        console.log($random);
+        $('.card-deck').append('<div class="card ' + $random[0] + ' mb-3" style="max-width: 18rem;">\n\
+        <input type="button" class="card-header btn ' + $random[1] + ' task newtask" data-toggle="modal" data-target="#edit-Task" \n\
         data-backdrop="static" data-keyboard="false" value="' + data + '"/></div>');
         $('.newtask').click(function (e) {
             e.preventDefault();
@@ -387,4 +379,28 @@ $(document).ready(function () {
         var time = date + '.' + month + '.' + year + ' ' + hour + ':' + min + ':' + sec;
         return time;
     }
+
+//Случайное значение
+    function getRandomColor(i) {
+        switch (i) {
+            case 0:
+                return ['text-white bg-primary', 'btn-primary'];
+            case 1:
+                return ['text-white bg-secondary', 'btn-secondary'];
+            case 2:
+                return ['text-white bg-success', 'btn-success'];
+            case 3:
+                return ['text-white bg-danger', 'btn-danger'];
+            case 4:
+                return ['text-white bg-warning', 'btn-warning'];
+            case 5:
+                return ['text-white bg-info', 'btn-info'];
+            case 6:
+                return ['bg-light', 'btn-light'];
+            case 7:
+                return ['text-white bg-dark', 'btn-dark'];
+        }
+    }
 });
+
+

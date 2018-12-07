@@ -24,8 +24,11 @@ class Main_Controller extends Controller {
         }
 
         if (!empty($errors)) {
+            $data['error'] = array_shift($errors);
+            $this->action_index($data);
             echo '<div style="color: red;">' . array_shift($errors) .
             '</div><hr>';
+            return;
         }
 
         $this->action_index($data);

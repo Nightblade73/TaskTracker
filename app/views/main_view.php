@@ -1,25 +1,27 @@
-<!DOCTYPE html>
-<div class="site-login">
-    <h1>Авторизация</h1>
+<link rel="stylesheet/less" type="text/css" href="../../css/main-styles.less" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
 
-    <p>Please fill out the following fields to login:</p>
-
-    <form action="/main/login" method="POST">
-        <p>
-        <p> <strong>Логин</strong>:</p>
-        <input type="text" name="login" value="<?php echo $data['login']; ?>">
-        </p>
-        <p>
-        <p>
-        <p>  <strong>Пароль</strong>:</p>
-        <input type="password" name="password">
-        </p>
-        <p>
-        <p>
-            <button type="submit" name="do_signin">Войти</button>
-        </p>
-    </form>
-    <div class="col-lg-offset-1" style="color:#999;">
-        <a href="/signup">Регистрация</a> 
+<div class="container site-login">
+    <div class="sign-in top">
+        <form id="form-login" action="/main/login" method="POST"> 
+            <div class="form-group">
+                <label for="login">Логин:</label>
+                <input type="text" class="form-control" name="login"  placeholder="Логин" value="<?php echo $data['login']; ?>">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password"  name="password" class="form-control" placeholder="Password">
+            </div>
+            <div class="col-lg-offset-1 registration" style="color:#999;">
+                <a href="/signup">Регистрация</a> 
+            </div>
+            <button type="submit" class="btn btn-primary float-right" name="do_signin">Войти</button>
+        </form>
+        <div class="alert alert-danger" role="alert"></div>
+        <?php
+//        if (isset($data['error'])) {
+//            echo '<div class="alert alert-danger" role="alert">' . $data['error'] . '</div>';
+//        }
+        ?>
     </div>
 </div>

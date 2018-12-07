@@ -8,21 +8,22 @@
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="#">
         <img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        <?php if ($_SESSION['logged_user']->role == 1): ?>
-            Авторизован пользователь!!
-        <?php else : ?>
-            Авторизован менеджер!!
-        <?php endif; ?>
+        "Авторизован <?php echo $_SESSION['logged_user']->login; ?>"
     </a>
-    <button id="add-task-but" type="button" class="btn btn-primary" data-toggle="modal" 
-            data-target="#add-Task" data-backdrop="static" data-keyboard="false">
-        Добавить задачу
-    </button>
+    <?php if ($_SESSION['logged_user']->role == 2): ?>
+        <button id="add-task-but" type="button" class="btn btn-primary" data-toggle="modal" 
+                data-target="#add-Task" data-backdrop="static" data-keyboard="false">
+            Добавить задачу
+        </button>
+    <?php else : ?>
+
+    <?php endif; ?>
+
     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
         <div class="btn-group mr-2" role="group" aria-label="First group">
-<!--            <button type="button" class="btn btn-secondary">От А-Я</button>
-            <button type="button" class="btn btn-secondary">От Я-А</button>-->
-            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!--            <button type="button" class="btn btn-secondary">От А-Я</button>
+                        <button type="button" class="btn btn-secondary">От Я-А</button>-->
+            <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle  text-white bg-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Сортировка по приоритету
             </button>
             <ul class="dropdown-menu">
@@ -35,7 +36,7 @@
         </div>
     </div>
     <form class="form-inline float-right">
-        <input class="form-control mr-sm-2 input-search" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control mr-sm-2 input-search" type="search" placeholder="Поиск" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0 btn-search" type="submit">Поиск</button>
     </form>
     <a class="nav-item nav-link disabled" href="tasklist/logout">Выйти</a>
@@ -43,66 +44,40 @@
 
 
 <div class="container-fluid">
-    <?php
-    foreach ($_SESSION['logged_user']->sharedTasksList as $task) {
-        echo '<div class="card text-white bg-primary mb-3 " style="max-width: 18rem;">
-                <input type="button" class="card-header btn btn-primary task" data-toggle="modal"
+    <div class="card-deck">
+        <?php
+
+        function getRandomColor($i) {
+            switch ($i) {
+                case 0:
+                    return ['text-white bg-primary', 'btn-primary'];
+                case 1:
+                    return ['text-white bg-secondary', 'btn-secondary'];
+                case 2:
+                    return ['text-white bg-success', 'btn-success'];
+                case 3:
+                    return ['text-white bg-danger', 'btn-danger'];
+                case 4:
+                    return ['text-white bg-warning', 'btn-warning'];
+                case 5:
+                    return ['text-white bg-info', 'btn-info'];
+                case 6:
+                    return ['bg-light', 'btn-light'];
+                case 7:
+                    return ['text-white bg-dark', 'btn-dark'];
+            }
+        }
+
+        foreach ($_SESSION['logged_user']->sharedTasksList as $task) {
+            $randColor = getRandomColor(rand(0, 7));
+            echo '<div class="card ' . $randColor[0] . ' mb-3 " style="max-width: 18rem;">
+                <input type="button" class="card-header btn ' . $randColor[1] . ' task" data-toggle="modal"
                 data-target="#edit-Task" data-backdrop="static" data-keyboard="false" value="'
-        . $task->task_name . '""/>'
-        . '</div>';
-    }
-    ?>
-
-    <!--                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Secondary card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Success card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Danger card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                    <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Warning card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                    <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Info card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-light mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Light card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                    <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Header</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Dark card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>-->
-
+            . $task->task_name . '""/>'
+            . '</div>';
+        }
+        ?>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -134,12 +109,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title task-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" id="delete-confirm" class="btn btn-danger float-righ" data-dismiss="modal" aria-label="Close" >
-                    Удалить задание?
-                </button>
-                <a id="task-del-but" class="float-right">
-                    <img class="icon-delete-task" src="../../img/ic/baseline_delete_outline_black_48dp.png" aria-hidden="true"/>
-                </a> 
+
+                <?php if ($_SESSION['logged_user']->role == 2): ?>
+                    <button type="button" id="delete-confirm" class="btn btn-danger float-righ" data-dismiss="modal" aria-label="Close" >
+                        Удалить задание?
+                    </button>
+                    <a id="task-del-but" class="float-right">
+                        <img class="icon-delete-task" src="../../img/ic/baseline_delete_outline_black_48dp.png" aria-hidden="true"/>
+                    </a> 
+                <?php else : ?>
+
+                <?php endif; ?> 
                 <button type="button" id="task-close-but" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -184,26 +164,33 @@
                                     <label for="p">Почта:</label>
                                     <p name="email"></p>
                                 </div>
-                                <button type="submit" class="btn btn-danger btn-del-member">Удалить</button>   
-                            </div> 
+                                <?php if ($_SESSION['logged_user']->role == 2): ?>
+                                    <button type="submit" class="btn btn-danger btn-del-member">Удалить</button>  
+                                <?php else : ?>
 
-                        </div>
-                        <div class="dropdown">
-                            <a class="new-member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                               data-backdrop="static" data-keyboard="false">
-                                <img class="icon-add"src="../../img/ic/baseline_add_black_48dp.png"/>
-                            </a>
-                            <div class="dropdown-menu p-2" aria-labelledby="dropDownNewMember">
-                                <div class="form-group">
-                                    <label for="input-name">Имя участника</label>
-                                    <input id="input-name" type="text" class="form-control"  placeholder="login">
-                                    <script>
-                                        $("#input-name").autocomplete();
-                                    </script>
-                                </div>
-                                <button type="submit" class="btn btn-primary add-new-member">Добавить</button>            
+                                <?php endif; ?>
                             </div> 
                         </div>
+                        <?php if ($_SESSION['logged_user']->role == 2): ?>
+                            <div class="dropdown">
+                                <a class="new-member" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                   data-backdrop="static" data-keyboard="false">
+                                    <img class="icon-add"src="../../img/ic/baseline_add_black_48dp.png"/>
+                                </a>
+                                <div class="dropdown-menu p-2" aria-labelledby="dropDownNewMember">
+                                    <div class="form-group">
+                                        <label for="input-name">Имя участника</label>
+                                        <input id="input-name" type="text" class="form-control"  placeholder="login">
+                                        <script>
+                                            $("#input-name").autocomplete();
+                                        </script>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary add-new-member">Добавить</button>            
+                                </div> 
+                            </div>
+                        <?php else : ?>
+
+                        <?php endif; ?>
                     </div>
 
                 </form>
