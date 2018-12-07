@@ -5,10 +5,9 @@
 <script src="../../js/script.js"></script>
 
 
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="#">
-        <img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        "Авторизован <?php echo $_SESSION['logged_user']->login; ?>"
+<nav class="navbar navbar-light menu" style="background-color: #e3f2fd;">
+    <a class="navbar-brand logo-title" href="#">
+        Добро пожаловать на таск-трекер <b>"Бабушкины поручения"</b>   Вы авторизовались как <b><?php echo $_SESSION['logged_user']->login; ?></b>
     </a>
     <?php if ($_SESSION['logged_user']->role == 2): ?>
         <button id="add-task-but" type="button" class="btn btn-primary" data-toggle="modal" 

@@ -1,12 +1,11 @@
 $(document).ready(function () {
-    $("#btn-login").click(function (e) {
+    $("#btn-sign-up").click(function (e) {
         e.preventDefault();
         $.ajax({
-            url: "http://localhost/main/login",
+            url: "http://localhost/signup/registration",
             type: "POST",
-            data: $('#form-login').serialize(),
+            data: $('#form-sign-up').serialize(),
             success: function (data) {
-                
                 var $json = JSON.parse(data);
                 console.log($json);
                 if (typeof $json.error !== 'undefined') {
@@ -24,8 +23,3 @@ $(document).ready(function () {
         return false;
     });
 });
-
-
-
-
-
